@@ -1,0 +1,134 @@
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
+
+// material-ui
+import { useTheme } from '@mui/material/styles';
+import { Box, Card, CardContent, CardHeader, Divider, Pagination, Typography } from '@mui/material';
+
+// project import
+import Highlighter from './third-party/Highlighter';
+
+// header style
+const headerSX = {
+    p: 2.5,
+    '& .MuiCardHeader-action': { m: '0px auto', alignSelf: 'center' }
+};
+
+// ==============================|| CUSTOM - MAIN CARD ||============================== //
+
+const MainCard = forwardRef(
+    (
+        {
+            border = true,
+            boxShadow,
+            children,
+            content = true,
+            contentSX = {},
+            darkTitle,
+            divider = true,
+            elevation,
+            secondary,
+            shadow,
+            sx = {},
+            title,
+            codeHighlight,
+            ...others
+        }: any,
+        ref
+    ) => {
+        const theme = useTheme();
+        boxShadow = theme.palette.mode === 'dark' ? boxShadow || true : boxShadow;
+
+        return (
+            <Card
+                elevation={elevation || 0}
+                ref={ref}
+                {...others}
+                sx={{
+                    ...sx,
+                    border: border ? '1px solid' : 'none',
+                    borderRadius: 2,
+                    borderColor: theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.grey?.A800,
+                    boxShadow: boxShadow && (!border || theme.palette.mode === 'dark') ? shadow || theme?.customShadows.z1 : 'inherit',
+                    ':hover': {
+                        boxShadow: boxShadow ? shadow || theme?.customShadows?.z1 : 'inherit'
+                    },
+                    '& pre': {
+                        m: 0,
+                        p: '16px !important',
+                        fontFamily: theme.typography.fontFamily,
+                        fontSize: '0.75rem'
+                    },
+                    '&::-webkit-scrollbar':{
+                        width: ".4rem",
+                   },
+                   '&::-webkit-scrollbar:hover':{
+                       width: ".8rem",
+                  },
+                   '&::-webkit-scrollbar-thumb:active': {
+                    width: '0.5rem',
+                    backgroundColor:' hsl(0, 0%, 29%)',
+                    borderRadius: '10px',
+                  },
+                   '&::-webkit-scrollbar-track':{
+                    width: '0.5rem',
+                    backgroundColor: 'hsla(0, 0%, 0%, 0.178)'
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    width: '0.5rem',
+                    background: 'hsla(0, 0%, 45%, 0.377)',
+                    borderRadius: '10px',
+                  },
+                  '&::-webkit-scrollbar-thumb:hover':{
+                    width: '0.8rem',
+                    backgroundColor: 'hsl(0, 0%, 45%)',
+                    borderRadius: '10px',
+                  }
+                }}
+            >
+                {/* card header and action */}
+                {!darkTitle && title && (
+                    <CardHeader sx={headerSX} titleTypographyProps={{ variant: 'subtitle1' }} title={title} action={secondary} />
+                )}
+                {darkTitle && title && (
+                    <CardHeader sx={headerSX} title={<Typography variant="h3">{title}</Typography>} action={secondary} />
+                )}
+
+                {/* content & header divider */}
+                {title && divider && <Divider />}
+
+                {/* card content */}
+                {content && <CardContent sx={contentSX}>{children}</CardContent>}
+                {!content && children}
+
+                {/* card footer - clipboard & highlighter  */}
+                {codeHighlight && (
+                    <>
+                        <Divider sx={{ borderStyle: 'dashed' }} />
+                        <Box display={'flex'} justifyContent={'center'} alignItems={'center'} marginY={2}>
+                            <Pagination count={10 / 2} variant="outlined"  shape="rounded" />
+                        </Box>
+                    </>
+                )}
+            </Card>
+        );
+    }
+);
+
+MainCard.propTypes = {
+    border: PropTypes.bool,
+    boxShadow: PropTypes.bool,
+    contentSX: PropTypes.object,
+    darkTitle: PropTypes.bool,
+    divider: PropTypes.bool,
+    elevation: PropTypes.number,
+    secondary: PropTypes.node,
+    shadow: PropTypes.string,
+    sx: PropTypes.object,
+    title: PropTypes.string,
+    codeHighlight: PropTypes.bool,
+    content: PropTypes.bool,
+    children: PropTypes.node
+};
+
+export default MainCard;
