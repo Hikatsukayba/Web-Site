@@ -1,0 +1,28 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Account activation on Marco {% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}You're receiving this email because you need to finish activation process on Marco.{% endblocktrans %}
+
+{% trans "Please go to the following page to activate account:" %}
+{{ url|safe }}
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The Marco team{% endblocktrans %}
+{% endblock text_body %}
+
+{% block html_body %}
+<p>{% blocktrans %}You're receiving this email because you need to finish activation process on Marco.{% endblocktrans %}</p>
+
+<p>{% trans "Please go to the following page to activate account:" %}</p>
+<p><a href="{{ url|safe }}">{{ url|safe }}</a></p>
+
+<p>{% trans "Thanks for using our site!" %}</p>
+
+<p>{% blocktrans %}The Marco team{% endblocktrans %}</p>
+
+{% endblock html_body %}
