@@ -49,6 +49,10 @@ class ItemsSubCategory(models.Model):
     subcategory=models.ForeignKey(SubCategory,on_delete=models.CASCADE)
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
 
+class ItemsCategory(models.Model):
+    category=models.ForeignKey(Category,on_delete=models.CASCADE)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
+
 class CustomProduct(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()

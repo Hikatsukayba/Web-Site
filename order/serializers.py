@@ -44,8 +44,8 @@ class ItemsCartSerialiser(serializers.ModelSerializer):
     def get_product(self,item):
         xt=ContentType.objects.get(model='Product')
         model = xt.model_class()
-        pro = model.objects.filter(id=item.cont_id)
-        ser = SimpleProduitserializer(pro,many=True)
+        pro = model.objects.get(id=item.cont_id)
+        ser = SimpleProduitserializer(pro,many=False)
         return ser.data
 
 class ShoppingCartSerializer(serializers.ModelSerializer):

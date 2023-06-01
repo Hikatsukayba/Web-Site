@@ -85,7 +85,6 @@ class CooperativeSerializer(serializers.ModelSerializer):
     def save(self ,**kwargs):
         user_id = self.context['user_id']
         cop = Cooperative.objects.only('user_id').all().values_list()     
-        print(cop)
         list=[]
         for c in cop:
             list.append(c)
@@ -104,16 +103,19 @@ class SimpleProduitserializer(serializers.ModelSerializer):
         fields = ['id','rate', 'title','stock','bio','images', 'price','date_created']
 
     def get_images(self,product):
-        pro = Imges.objects.filter(product_id=product.id)
-        ser = ImageSer(pro,many=True)
-        return ser.data
+        try:
+            pro = Imges.objects.filter(product_id=product.id)
+            ser = ImageSer(pro,many=True)
+            return ser.data
+        except:
+            'no images'
     def get_rate(self, product):
-        if Rating.objects.get(product_id=product.id).DoesNotExist()== True:
-            return 0
-        else:
+        try:
             rev = Rating.objects.get(product_id=product.id)
             ser= RatingSerializer(rev,read_only=True)
             return ser.data['rate']
+        except:
+            return 0
 
 class LikeSerializers(serializers.ModelSerializer):
     product=SimpleProduitserializer(read_only=True)
@@ -139,38 +141,46 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id','subcategory','title','stock','description','price','bio','images','rating','like','reviews','date_created']
 
     def get_images(self,product):
-        pro = Imges.objects.filter(product_id=product.id)
-        ser = ImageSer(pro,many=True)
-        return ser.data
+        try:
+            pro = Imges.objects.filter(product_id=product.id)
+            ser = ImageSer(pro,many=True)
+            return ser.data
+        except:
+            pass
 
     def get_subcategory(self,product):
-        pro = ItemsSubCategory.objects.filter(product_id=product.id)
-        ser = ItemsSubCategorySerializer(pro,many=True)
-        return ser.data
+        try:
+            pro = ItemsSubCategory.objects.filter(product_id=product.id)
+            ser = ItemsSubCategorySerializer(pro,many=True)
+            return ser.data
+        except:
+            pass
     
     def get_like(self,product):
-        pro = Like.objects.filter(product_id=product.id).count()
-        return pro
-    def get_reviews(self, product):
-        rev = Review.objects.filter(product_id=product.id)
-        ser= ReviewSerializer(rev,many=True)
-        return ser.data
-    def get_rating(self, product):
-        if Rating.objects.get(product_id=product.id).DoesNotExist()== True:
+        try:
+            pro = Like.objects.filter(product_id=product.id).count()
+            return pro
+        except:
             return 0
-        else:
+    def get_reviews(self, product):
+        try:
+            rev = Review.objects.filter(product_id=product.id)
+            ser= ReviewSerializer(rev,many=True)
+            return ser.data
+        except:
+            return "No reviews recintly"
+    def get_rating(self, product):
+        try:
             rev = Rating.objects.get(product_id=product.id)
             ser= RatingSerializer(rev,read_only=True)
             return ser.data['rate']
+        except:
+            return 0
+            
     
     def create(self,validated_data, **kwargs):
-        cop=self.context['cop_id']
-        sub=self.context['request']['sub']
-        pro=Product.objects.create(cooperative_id=cop,**validated_data)
-        if sub != None:
-            for s in sub:
-                ItemsSubCategory.objects.create(product_id=pro.id,subcategory_id=s)   
-        Rating.objects.create(rate=0,product_id=pro.id)
+        cop_id=self.context['cooperative']
+        pro=Product.objects.create(cooperative_id=cop_id,**validated_data)
         return pro
 
 

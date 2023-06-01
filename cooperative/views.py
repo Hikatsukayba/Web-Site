@@ -12,7 +12,7 @@ from rest_framework.exceptions import APIException
 from .permission import IsCooperative
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
-from .models import Cooperative, ItemsSubCategory, Product,Imges, Like, Review, Rating, Category, SubCategory
+from .models import Cooperative, ItemsCategory, ItemsSubCategory, Product,Imges, Like, Review, Rating, Category, SubCategory
 from .filters import ProductFilter, SubCategoryFilter
 from .pagination import Productpagination
 from .serializers import CooperativeSerializer, ItemsSubCategorySerializer, LikeSerializers, OrderCoserializer, ProductSerializer, ImageSer, ReviewSerializer, RatingSerializer, CategorySerializer, SimpleProduitserializer, SubcategorySerializer
@@ -83,6 +83,9 @@ class CooperativeViewSet(viewsets.ModelViewSet):
         qs = Cooperative.objects.get(user_id=request.user.id)
         ser=CooperativeSerializer(qs,many=False)
         return Response(ser.data)
+    @action(detail=True, methods=['POST'])
+    def AddProduct(self, request, *args, **kwargs):
+        print(request.__dict__)
 
     def create(self, request, *args, **kwargs):
         self.serializer_classes=[IsAuthenticated]
@@ -121,6 +124,26 @@ class ProductViewSet(viewsets.ModelViewSet):
     pagination_class=Productpagination
     search_fields = ['title', 'description']
     ordering_fields = ['price','date_created']
+    @action(detail=True, methods=['POST'])
+    def AddProduct(self, request, *args, **kwargs):
+        print(request.POST.getlist('sub'))
+        qs=Cooperative.objects.get(user_id=request.user.id)
+        ser=ProductSerializer(data={
+            'title':request.POST.get('title'),
+            'stock':request.POST.get('stock'),
+            'price':request.POST.get('price'),
+            'bio':request.POST.get('bio'),
+            'description':request.POST.get('description'),   
+        },context={'cooperative':qs.ice})
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        images=request.FILES.getlist('image')
+        subcategory=request.POST.getlist('sub')
+        cat=ItemsCategory.objects.create(product_id=ser.data['id'],category_id=request.POST.get('cat'))
+        for img in images:
+            Imges.objects.create(image=img,product_id=ser.data['id'])
+        return Response(ser.data)
+    
 
     def destroy(self, request, *args, **kwargs):
         self.permission_classes=[IsCooperative]

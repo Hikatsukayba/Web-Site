@@ -14,7 +14,7 @@ routs_order=NestedDefaultRouter(router,'orders',lookup='order')
 route_cart=NestedDefaultRouter(router,'shoppingcarts',lookup='shoppingcart')
 routs_order.register(r'shippings', ShippingViewSet,basename='shipping')
 routs_order.register(r'payments', PaymentViewSet,basename='payment')
-route_cart.register('itemscart',CartitemViewset,basename='item')
+route_cart.register('items',CartitemViewset,basename='items')
 routs_order.register('items',OrderItemsViewSet,basename='items')
 
 urlpatterns = router.urls + routs_order.urls+route_cart.urls

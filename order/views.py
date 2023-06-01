@@ -70,8 +70,11 @@ class ShoppingCartViewSet(CreateModelMixin,
 class GetShoppingCartViewSet(ModelViewSet):
     serializer_class = ShoppingCartSerializer
     def update(self, request, *args, **kwargs):
-        qs=ShoppingCart.objects.filter(id=kwargs['pk']).update(customer_id=self.request.user.id)
-        return Response('ok')
+        if request.user.id:
+            qs=ShoppingCart.objects.filter(id=kwargs['pk']).update(customer_id=request.user.id)
+            return Response('has update')
+        else:
+            return Response('ok')
     
     def get_queryset(self):
         qs=ShoppingCart.objects.filter(customer_id=self.request.user.id)
