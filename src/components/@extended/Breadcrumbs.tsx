@@ -67,20 +67,17 @@ const Breadcrumbs = ({ navigation, title,Handler, ...others }:any) => {
             location.pathname === '/Cooperative/product' ? (
                 <Grid container sx={{ mt: 2 }} justifyContent={'space-between'}>
                     <Grid item sx={{ mt: 2 }}>
-                        <Typography marginLeft={3} variant="h5">{item.title} List</Typography>
-                    </Grid>
-                    <Grid item sx={{ mt: 2 }}>
-                        <Button onClick={Handler}>Add Product</Button>
+                        <Typography marginLeft={3} variant="h5">{item?.title} List</Typography>
                     </Grid>
                 </Grid>
             ) : (
                 <Grid item sx={{ mt: 2 }}>
-                    <Typography marginLeft={3} variant="h5">{item.title} </Typography>
+                    <Typography marginLeft={3} variant="h5">{item?.title} </Typography>
                 </Grid>
             );
 
         // main
-        if (item.breadcrumbs !== false) {
+        if (item?.breadcrumbs !== false) {
             breadcrumbContent = (
                 <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>
                     <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" spacing={1}>

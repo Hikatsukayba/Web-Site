@@ -20,7 +20,7 @@ const HeaderContent = () => {
             {!matchesXs && <Search />}
 
             <Notification />
-            <Button>Login</Button>
+            <Button variant='contained' href='/login'>Login</Button>
             
         </>
     );

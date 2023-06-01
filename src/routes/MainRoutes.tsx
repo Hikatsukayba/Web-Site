@@ -10,6 +10,7 @@ const DashboardDefault = Loadable(lazy(() => import('../pages/dashboard')));
 
 // render - sample page
 const ListProduct = Loadable(lazy(() => import('../pages/products manager/ProductList')));
+const ListOrders = Loadable(lazy(() => import('../pages/Order Manager')));
 
 // render - utilities
 const Typography = Loadable(lazy(() => import('../pages/components-overview/Typography')));
@@ -33,7 +34,7 @@ const MainRoutes = {
         },
         {
             path: 'orders',
-            element: <Shadow />
+            element: <ListOrders />
         },
         {
             path: 'typography',

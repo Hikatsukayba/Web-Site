@@ -45,7 +45,7 @@ const Header = ({ open, handleDrawerToggle }:any) => {
         color: 'inherit',
         backgroundColor:'white',
         elevation: 0,
-        zIndex:1800,
+        zIndex:(theme) => theme.zIndex.drawer + 1,
         sx: {
             borderBottom: `0.5rem solid ${theme.palette.divider}`
             // boxShadow: theme.customShadows.z1

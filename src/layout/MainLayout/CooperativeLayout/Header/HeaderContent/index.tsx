@@ -5,7 +5,7 @@ import { GithubOutlined } from '@ant-design/icons';
 // project import
 import Search from './Search';
 import Profile from './Profile';
-import Notification from './Notification';
+import Notification from './Shopping';
 import MobileSection from './MobileSection';
 import Navigation from './Navigation';
 

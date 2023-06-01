@@ -59,7 +59,7 @@ const NavItem = ({ item, level }: any) => {
             onClick={() => itemHandler(item.id)}
             selected={isSelected}
             sx={{
-                zIndex: 1201,
+                zIndex: (theme) => theme.zIndex.drawer + 1,
                 pl: drawerOpen ? `${level * 28}px` : 1.5,
                 py: !drawerOpen && level === 1 ? 1.25 : 1,
                 ...(drawerOpen && {

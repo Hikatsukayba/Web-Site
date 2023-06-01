@@ -4,24 +4,27 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { NavLink } from "react-router-dom";
 import { FaShoppingCart, AiFillStar } from "react-icons/all";
 import axios from "axios";
 import { CardActionArea, Rating } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 
 const CardShop = ({ image, title, price, rate, bio, id }: any) => {
-  const handlerAdd = async () => {
-    const cart_id = localStorage.getItem("cart-id");
-    console.log(cart_id);
-    const body = {
-      cont_id: id,
+  const addmanager=useMutation({
+    mutationFn:(data)=>{
+      let cart_id = localStorage.getItem("cart-id");
+      if(cart_id ===null){
+        axios.post('/api/shoppingcarts/').then((res)=>localStorage.setItem("cart-id",res.data?.id))
+        cart_id=localStorage.getItem("cart-id");
+      }
+      const body = {
+      cont_id: data,
       quantity: 1,
     };
-    await axios.post(`/api/shoppingcarts/${cart_id}/itemscart/`, body);
-  };
+      return axios.post(`/api/shoppingcarts/${cart_id}/itemscart/`, body);
+    }
+  })
   return (
     <Card style={{ position: "relative", zIndex: "modal",boxShadow:'' }}>
       <CardActionArea href="/">
@@ -55,6 +58,7 @@ const CardShop = ({ image, title, price, rate, bio, id }: any) => {
         </CardContent>
       </CardActionArea>
       <IconButton
+      onClick={()=>addmanager.mutate(id)}
         style={{
           color: "#07d111",
           position: "absolute",

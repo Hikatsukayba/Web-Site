@@ -15,7 +15,7 @@ import Filters from './FilterContent';
 import useFilters from '../../../../Hooks/useFilter';
 
 function ShopContent() {
-    const {urlf,setINfo}=useFilters('/api/products/?cooperative__user__is_enabled=true');
+    const { urlf, setINfo } = useFilters('/api/products/?cooperative__user__is_enabled=true');
     const { data } = useQuery({
         queryKey: ['get', 'list', urlf],
         queryFn: async ({ queryKey }) => {
@@ -27,12 +27,10 @@ function ShopContent() {
         <ComponentSkeleton>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <MainCard>
-                        Products
-                    </MainCard>
+                    <MainCard>Products</MainCard>
                 </Grid>
                 <Grid item xs={2.5}>
-                    <MainCard sx={{ overflowY: 'scroll',minHeight: '100vh', maxHeight: '100vh' }}>
+                    <MainCard sx={{ overflowY: 'scroll', minHeight: '100vh', maxHeight: '100vh' }}>
                         <SimpleBar
                             sx={{
                                 '& .simplebar-content': {
@@ -41,30 +39,19 @@ function ShopContent() {
                                 }
                             }}
                         >
-                            <Filters setFiler={setINfo}/>
-                            
+                            <Filters setFiler={setINfo} />
                         </SimpleBar>
                     </MainCard>
                 </Grid>
                 <Grid item xs={9}>
                     <Grid container spacing={3}>
-                    <Grid item xs={7} sm={5} md={4} lg={3}>
-                            <CardShop image={''} title={'ali'} price={10.2} rate={5} bio={10} id={1}/>
-
-                        </Grid><Grid item xs={7} sm={5} md={4} lg={3}>
-                            <CardShop image={''} title={'ali'} price={10.2} rate={5} bio={10} id={1}/>
-
-                        </Grid><Grid item xs={7} sm={5} md={4} lg={3}>
-                            <CardShop image={''} title={'ali'} price={10.2} rate={5} bio={10} id={1}/>
-
-                        </Grid><Grid item xs={7} sm={5} md={4} lg={3}>
-                            <CardShop image={''} title={'ali'} price={10.2} rate={2.5} bio={10} id={1}/>
-                        </Grid><Grid item xs={7} sm={5} md={4} lg={3}>
-                            <CardShop image={''} title={'ali'} price={10.2} rate={5} bio={10} id={1}/>
-                        </Grid><Grid item xs={7} sm={5} md={4} lg={3}>
-                            <CardShop image={''} title={'ali'} price={10.2} rate={5} bio={10} id={1}/>
-  
-                        </Grid>
+                        {data?.data?.results?.map((item: any) => {
+                            return (
+                                <Grid key={item?.id} item xs={7} sm={5} md={4} lg={3}>
+                                    <CardShop image={item.images[0]?.image} title={item?.title} price={item?.price} rate={item.rate} bio={item.bio} id={item.id} />
+                                </Grid>
+                            );
+                        })}
                     </Grid>
                 </Grid>
             </Grid>
